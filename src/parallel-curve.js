@@ -120,11 +120,6 @@ var ParallelCurve = {
 			parallelPoints.push(point1);
 			parallelPoints.push(point2);
 		}
-		var A = points[points.length - 1];
-		var B = points[points.length - 2];
-		var point = this.createPerpendicularSegment(A, B, offset, !isLeftSide);
-		parallelPoints.push(point);
-
 		this.cutOverlappingSegments(parallelPoints);
 		return parallelPoints;
 	},
@@ -152,6 +147,17 @@ var ParallelCurve = {
 				a2.y = point.y;
 				toRemove.push(i - 1);
 			}
+		}
+		var first = points[0];
+		var second = points[1];
+		var last = points[points.length-1];
+		var prevLast = points[points.length-2];
+		if (this.isLinesIntersect(first, second, prevLast, last)) {
+			var point = this.intersectPoint(first, second, prevLast, last);
+			points[0].x = point.x;
+			points[0].y = point.y;
+			points[points.length-1].x = point.x;
+			points[points.length-1].y = point.y;
 		}
 		for (var i = toRemove.length - 1; i >= 0; i--) {
 			points.splice(toRemove[i], 1);
