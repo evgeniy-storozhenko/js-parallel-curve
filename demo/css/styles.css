@@ -1,0 +1,29 @@
+* {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	line-height: 1;
+}
+
+body {
+	background: url(../img/cream_pixels.png) repeat;
+}
+
+h3 {
+	text-align: center;
+	margin: 20px;
+	padding: 5px;
+	color: #333;
+}
+
+.example {
+	margin: 10px;
+	float: left;
+}
+
+#page {
+	width: 1040px;
+	margin: 40px auto;
+	background: #fff;
+	border: 1px solid #ccc;
+}
