@@ -1,102 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Parallel Curve JS Example</title>
-<link href="css/styles.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Parallel Curve JS Example</title>
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 <body>
-	<div id="page">
-		<h3>Parallel Curve JS Example</h3>
-		<div class="example">
-			<svg id="example1" width="500px" height="300px"
-				xmlns="http://www.w3.org/2000/svg"></svg>
-		</div>
-		<div class="example">
-			<svg id="example2" width="500px" height="300px"
-				xmlns="http://www.w3.org/2000/svg"></svg>
-		</div>
-		<div class="example">
-			<svg id="example3" width="500px" height="300px"
-				xmlns="http://www.w3.org/2000/svg"></svg>
-		</div>
-		<div class="example">
-			<svg id="example4" width="500px" height="400px"
-				xmlns="http://www.w3.org/2000/svg"></svg>
-		</div>
-		<div style="clear: both;"></div>
-	</div>
+<div id="page">
+    <h3>Parallel Curve JS Example</h3>
+
+    <div class="example">
+        <svg id="example1" width="500px" height="300px"
+             xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="example">
+        <svg id="example2" width="500px" height="300px"
+             xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="example">
+        <svg id="example3" width="500px" height="300px"
+             xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="example">
+        <svg id="example4" width="500px" height="400px"
+             xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div style="clear: both;"></div>
+</div>
 </body>
 <script type="text/javascript" src="../src/parallel-curve.js"></script>
 <script type="text/javascript">
-	
-	var lines = getLines();
-	var SvgCanvas = getCanvas();
 
-	SvgCanvas.drow(lines[0], "green", 1);
-	SvgCanvas.drow(lines[1], "blue", 2);
-	SvgCanvas.drow(lines[2], "aqua", 3);
-	SvgCanvas.drow(lines[3], "black", 4);
-	
-	SvgCanvas.drowParallel(lines[0], "red", 1, 10, true);
-	SvgCanvas.drowParallel(lines[1], "red", 2, 10, true);
-	SvgCanvas.drowParallel(lines[2], "red", 3, 10, true);
-	SvgCanvas.drowParallel(lines[3], "red", 4, 10, true);
+    var Example = {
 
-	
-	function getCanvas() {
-		return {
-			createPolyline : function(color, points) {
-				var std = "http://www.w3.org/2000/svg";
-				var shape = document.createElementNS(std, "polyline");
-				var strPoints = "";
-				points.map(function(point) {
-					strPoints += point.x + "," + point.y + " ";
-				});
-				shape.setAttribute("points", strPoints);
-				shape.setAttribute("stroke", color);
-				shape.setAttribute("fill", "none");
-				shape.setAttribute("stroke-width", 3);
-				return shape;
-			},
-			
-			addShapeToExample : function(shape, num) {
-				document.getElementById("example" + num).appendChild(shape);
-			},
-			
-			drow : function(line, color, num) {
-				this.addShapeToExample(this.createPolyline(color, line), num);
-			},
-			
-			drowParallel : function(line, color, num, offset, isLeft) {
-				line = ParallelCurve.create(line, offset, isLeft);
-				this.addShapeToExample(this.createPolyline(color, line), num);
-			}
-		};
-	}
-	
-	function getLines() {
-		return [
-			[
-			 {x:350, y:75}, {x:379, y:161}, {x:469, y:161}, {x:397, y:215}, 
-		     {x:423, y:301}, {x:350, y:250}, {x:277, y:301}, {x:303, y:215}, 
-		     {x:231, y:161}, {x:321, y:161}, {x:350, y:75}
-		    ], 
-		   	[
-		   	 {x:150, y:45}, {x:258, y:107.5}, {x:258, y:232.5}, 
-		     {x:150, y:295}, {x:42, y:232.6}, {x:42, y:107.5}, {x:150, y:45}
-		    ], 
-		    [
-		     {x:200, y:280}, {x:230, y:130}, {x:300, y:160}, {x:450, y:25}, 
-		     {x:450, y:75}, {x:400, y:115}, {x:470, y:205}
-		    ], 
-		    [
-		     {x:150, y:45}, {x:258, y:107.5}, {x:258, y:232.5}, {x:150, y:295}, 
-		     {x:42, y:232.6}, {x:42, y:107.5}, {x:170, y:105}, {x:218, y:137.5}, 
-		     {x:218, y:202.5}, {x:150, y:255}, {x:72, y:200.6}, {x:80, y:135}
-		    ]
-		];
-	}
-	
+        offset: 10,
+
+        drow: function() {
+            var parallelCurves = [];
+
+            parallelCurves[0] = ParallelCurve.create(this.lines[0], this.offset, true);
+            parallelCurves[1] = ParallelCurve.create(this.lines[1], this.offset, true);
+            parallelCurves[2] = ParallelCurve.create(this.lines[2], this.offset, true);
+            parallelCurves[3] = ParallelCurve.create(this.lines[3], this.offset, true);
+
+            this.drowCurve(this.lines[0], "green", 1);
+            this.drowCurve(parallelCurves[0], "red", 1);
+
+            this.drowCurve(this.lines[1], "blue", 2);
+            this.drowCurve(parallelCurves[1], "red", 2);
+
+            this.drowCurve(this.lines[2], "aqua", 3);
+            this.drowCurve(parallelCurves[2], "red", 3);
+
+            this.drowCurve(this.lines[3], "black", 4);
+            this.drowCurve(parallelCurves[3], "red", 4);
+        },
+
+        createPolyline: function (color, points) {
+            var std = "http://www.w3.org/2000/svg";
+            var shape = document.createElementNS(std, "polyline");
+            var strPoints = "";
+            points.map(function (point) {
+                strPoints += point.x + "," + point.y + " ";
+            });
+            shape.setAttribute("points", strPoints);
+            shape.setAttribute("stroke", color);
+            shape.setAttribute("fill", "none");
+            shape.setAttribute("stroke-width", 3);
+            return shape;
+        },
+
+        addShapeToExample: function (shape, num) {
+            document.getElementById("example" + num).appendChild(shape);
+        },
+
+        drowCurve: function (line, color, num) {
+            this.addShapeToExample(this.createPolyline(color, line), num);
+        },
+
+        lines: [
+            [
+                {x: 350, y: 75},  {x: 379, y: 161},
+                {x: 469, y: 161}, {x: 397, y: 215},
+                {x: 423, y: 301}, {x: 350, y: 250},
+                {x: 277, y: 301}, {x: 303, y: 215},
+                {x: 231, y: 161}, {x: 321, y: 161},
+                {x: 350, y: 75}
+            ],
+            [
+                {x: 150, y: 45}, {x: 258, y: 107.5},
+                {x: 258, y: 232.5}, {x: 150, y: 295},
+                {x: 42, y: 232.6}, {x: 42, y: 107.5},
+                {x: 150, y: 45}
+            ],
+            [
+                {x: 200, y: 280}, {x: 230, y: 130},
+                {x: 300, y: 160}, {x: 450, y: 25},
+                {x: 450, y: 75}, {x: 400, y: 115},
+                {x: 470, y: 205}
+            ],
+            [
+                {x: 150, y: 45}, {x: 258, y: 107.5},
+                {x: 258, y: 232.5}, {x: 150, y: 295},
+                {x: 42, y: 232.6}, {x: 42, y: 107.5},
+                {x: 170, y: 105}, {x: 218, y: 137.5},
+                {x: 218, y: 202.5}, {x: 150, y: 255},
+                {x: 72, y: 200.6}, {x: 80, y: 135}
+            ]
+        ]
+    };
+
+    Example.drow();
+
 </script>
 </html>
